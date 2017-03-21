@@ -1,0 +1,55 @@
+---
+title: "R Markdown and Leaflet"
+author: "S.A.Aksyuk"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r echo = F, message = F, warning = F}
+
+
+# пакеты ----------------------------------------------------------------------
+library('leaflet')
+
+
+# настройки отображения отчёта ------------------------------------------------
+
+# опции блоков кода ===========================================================
+knitr::opts_chunk$set(echo = F, warning = F, message = F)
+
+```
+
+
+This map shows locations of The Russian Presidential Academy of National Economy and Public Administration buildings in Moscow, Russia. Zoom to expand south-west corner, where the main campus is situated.    
+
+```{r}
+fileURL <- 'https://raw.githubusercontent.com/aksyuk/Coursera_DDP/master/ranepa_logo.png'
+ranepa.icon <- makeIcon(iconUrl = fileURL, 
+                        iconWidth = 31*74/98,
+                        iconHeight = 31,
+                        iconAnchorX = 31*74/98 / 2,
+                        iconAnchorY = 16)
+
+fileURL <- 'https://raw.githubusercontent.com/aksyuk/Coursera_DDP/master/RANEPA_loc.csv'
+df <- read.table(fileURL, header = T, as.is = T, 
+                 sep = ';', dec = ',')
+RANEPA.loc <- df[, c('lat', 'lng')]
+ranepa.sites <- paste0("<a href='", df[, 'hyperlink'], "'>", 
+                       df[, 'address_eng'], "</a></br><em>", 
+                       df[, 'address_ru'], "</em>")
+
+myMap <- RANEPA.loc %>% leaflet(width = 800, height = 800) %>% addTiles() %>% 
+    addMarkers(icon = ranepa.icon, popup = ranepa.sites)
+myMap
+
+```
+
+### R packages used  
+
+1. Joe Cheng, Bhaskar Karambelkar and Yihui Xie (2017). leaflet: Create Interactive Web Maps with the JavaScript 'Leaflet' Library. R
+  package version 1.1.0. https://CRAN.R-project.org/package=leaflet  
+
+### Data sources  
+
+1. RANEPA oficcial site. URL: [http://www.ranepa.ru/lyceum/infrastruktura/korpusa-akademii](http://www.ranepa.ru/lyceum/infrastruktura/korpusa-akademii)   
+2. Map web-API from Yandex. URL: [https://yandex.ru/map-constructor/location-tool/](https://yandex.ru/map-constructor/location-tool/])  
