@@ -1,0 +1,66 @@
+---
+title: "Interactive plot via plotly"
+author: "Svetlana Aksyuk"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = FALSE)
+
+library('plotly')
+library('data.table')
+library('jsonlite')
+
+```
+
+## Import of butter to RF
+
+```{r, echo = F, message = F, warning = F, results = 'asis'}
+# читаем данные по импорту масла в РФ
+fileURL <- 'https://raw.githubusercontent.com/aksyuk/R-data/master/COMTRADE/040510-Imp-RF-comtrade.csv'
+DF.import <- data.table(read.csv(fileURL, as.is = T))
+# читаем справочник по странам
+fileURL <- "https://raw.githubusercontent.com/aksyuk/R-data/master/COMTRADE/reporters.csv"
+reporters <- read.csv2(fileURL, as.is = T)
+DF.import <- merge(DF.import, reporters, 
+                   by.x = 'Reporter', by.y = 'Reporter',
+                   all.y = F)
+dt <- DF.import[, c('Year', 'Reporter', 
+                    'Trade.Value.USD', 'European_Union'), with = F]
+dt.1 <- dt[, sum(.SD$Trade.Value.USD/10^3), by = c('Year', 'European_Union')]
+colnames(dt.1)[colnames(dt.1) == 'V1'] <- 'Trade.Value.000.USD'
+dt.2 <- data.table(Year = 2010:2016)
+dt.2 <- merge(dt.1[European_Union == 1, c('Year', 'Trade.Value.000.USD')],
+              dt.2, by.x = 'Year', by.y = 'Year', all.y = T)
+names(dt.2)[names(dt.2) == 'Trade.Value.000.USD'] <- 'Trade.Value.000.USD.EU'
+dt.2 <- merge(dt.1[European_Union == 0, c('Year', 'Trade.Value.000.USD')],
+              dt.2, by.x = 'Year', by.y = 'Year', all.y = T)
+names(dt.2)[names(dt.2) == 'Trade.Value.000.USD'] <- 'Trade.Value.000.USD.others'
+rm(dt.1)
+
+pl1 <- plot_ly(dt.2, x = ~Year, y = ~Trade.Value.000.USD.others, 
+               type = 'bar', name = 'Others', height = 400) %>% 
+    add_trace(y = ~Trade.Value.000.USD.EU, name = 'EU') %>%
+    layout(yaxis = list(title = 'Count'), barmode = 'stack')
+
+pl2 <- dt[European_Union == 1, ] %>% 
+    plot_ly(y = ~Trade.Value.USD/10^3, x = ~Year, 
+            height = 400) %>% 
+    add_boxplot()
+
+subplot(pl1, pl2)
+
+```
+
+<font size = 5><em>Import to Russian Federation, US dollars</em></font>
+
+## References   
+
+1. <a href = 'https://comtrade.un.org/data/'>UN Comtrade Database</a>
+1. Carson Sievert, Chris Parmer, Toby Hocking, Scott Chamberlain,
+  Karthik Ram, Marianne Corvellec and Pedro Despouy (2016). plotly:
+  Create Interactive Web Graphics via 'plotly.js'. R package version
+  4.5.6. https://CRAN.R-project.org/package=plotly  
+1. Carson Sievert. plotly for R. URL: <a href = 'https://cpsievert.github.io/plotly_book/'>https://cpsievert.github.io/plotly_book/</a>
