@@ -41,20 +41,28 @@ names(dt.2)[names(dt.2) == 'Trade.Value.000.USD'] <- 'Trade.Value.000.USD.others
 rm(dt.1)
 
 pl1 <- plot_ly(dt.2, x = ~Year, y = ~Trade.Value.000.USD.others, 
-               type = 'bar', name = 'Others', height = 400) %>% 
-    add_trace(y = ~Trade.Value.000.USD.EU, name = 'EU') %>%
-    layout(yaxis = list(title = 'Count'), barmode = 'stack')
+               type = 'bar', name = 'Others', height = 400,
+               marker = list(color = 'green')) %>% 
+    add_trace(y = ~Trade.Value.000.USD.EU, name = 'EU',
+              marker = list(color = 'purple')) %>%
+    layout(yaxis = list(title = 'US Dollars, thousands'), barmode = 'stack',
+           legend = list(x = 0, y = 0.95))
 
 pl2 <- dt[European_Union == 1, ] %>% 
-    plot_ly(y = ~Trade.Value.USD/10^3, x = ~Year, 
+    plot_ly(y = ~Trade.Value.USD/10^3, name = 'EU', 
+            showlegend = FALSE, x = ~Year, 
+            type = 'box', line = list(color = 'purple'),
             height = 400) %>% 
-    add_boxplot()
+    add_trace(data = dt[European_Union != 1, ], y = ~Trade.Value.USD/10^3, 
+              name = 'Others', x = ~Year, showlegend = FALSE,
+              line = list(color = 'green')) %>% 
+    layout(boxmode = "group", yaxis = list(title = 'US Dollars, thousands'))
 
-subplot(pl1, pl2)
+subplot(pl1, pl2) %>% config(displayModeBar = F) 
 
 ```
 
-<font size = 5><em>Import to Russian Federation, US dollars</em></font>
+<font size = 5><em>Import of butter to Russian Federation from Europe stopped after 2014 due to trade sanctions.</em></font>
 
 ## References   
 
