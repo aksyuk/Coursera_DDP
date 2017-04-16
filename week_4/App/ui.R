@@ -16,7 +16,7 @@ indexes.list <- data.table(name = c('GDP per capita (current US$)',
 # размещение всех объектов на странице
 shinyUI(
     # создать страницу с боковой панелью и главной областью для отчётов
-    pageWithSidebar(
+    fluidPage(
         # название приложения:
         headerPanel('GDP per capita on Map'),
         # боковая панель
@@ -41,12 +41,16 @@ shinyUI(
             verbatimTextOutput('summary'),
             # текстовый объект для отображения коэффициента Джинни
             htmlOutput('gini.text'),
-            # текстовый объект для отображения первой пятёрки
-            htmlOutput('top.5.header'),
-            verbatimTextOutput('top.5'),
-            # текстовый объект для отображения последней пятёрки
-            htmlOutput('low.5.header'),
-            verbatimTextOutput('low.5')
+            fluidRow(
+                column(6,
+                    # текстовый объект для отображения первой пятёрки
+                    htmlOutput('top.5.header'),
+                    verbatimTextOutput('top.5')),
+                column(6,
+                    # текстовый объект для отображения последней пятёрки
+                    htmlOutput('low.5.header'),
+                    verbatimTextOutput('low.5'))
+                )
             )
         )
     )
