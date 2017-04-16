@@ -43,6 +43,10 @@ Application loads data on the fly, so it takes some time to plot a map.
 
 Only countries are represented in the data, macroregions are excluded.   
 
+## Application URL
+
+https://aksyuk.shinyapps.io/worldmap_gdp/
+
 Enjoy!
 
 ## References
