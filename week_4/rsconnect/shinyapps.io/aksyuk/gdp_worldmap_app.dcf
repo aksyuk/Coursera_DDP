@@ -1,0 +1,11 @@
+name: gdp_worldmap_app
+title: GDP Worldmap App
+account: aksyuk
+server: shinyapps.io
+appId: 172549
+bundleId: 790794
+url: https://aksyuk.shinyapps.io/gdp_worldmap_app/
+when: 1492333237.6292
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: App_pres.md|App_pres.Rpres|README.html|scr_01.png|App_pres-figure/unnamed-chunk-2-1.png

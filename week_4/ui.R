@@ -1,5 +1,6 @@
 
 library('shiny')
+library('data.table')
 
 # список показателей для загрузки
 indexes.list <- data.table(name = c('GDP per capita (current US$)',
