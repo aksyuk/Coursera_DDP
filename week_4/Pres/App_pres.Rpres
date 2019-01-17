@@ -127,14 +127,15 @@ slide.number <- slide.number + 1
 ```
 <div class = "footer-right" style = "font-size: 70%;">`r slide.number`</div>
 
-Calculated output example 
+ 
 ========================================================
-<h3>2015, current US$</h3>
+<h3>Calculated output example: 2015, current US$</h3>
 
-<div align = 'center'><img src = 'scr_02.png' width = 1200></div>
+<div align = 'center'><img src = 'scr_02.png' width = 1000></div>
 
 <b>See a map and test this app at <a href = "https://aksyuk.shinyapps.io/worldmap_gdp/">aksyuk.shinyapps.io/worldmap_gdp/</a></b>
 
+<b>Documentation: <a href = "https://github.com/aksyuk/Coursera_DDP/blob/master/week_4/App/README.md">README.md</a></b>
 
 <!-- Нижний колонтитул -->
 ```{r include = F}
