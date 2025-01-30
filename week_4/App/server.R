@@ -1,4 +1,3 @@
-
 library('data.table')
 library('googleVis')
 library('WDI')
@@ -23,7 +22,7 @@ shinyServer(function(input, output) {
         na.omit(data.frame(WDI(indicator = indexes.list[name == input$index.name, indicator], 
                                start = input$year, end = input$year))[48:264, ])
     })
-
+    
     # output$sp.text <- renderText({
     #     paste0('Selected indicator code: ',
     #           indexes.list[name == input$index.name, name],
@@ -36,9 +35,7 @@ shinyServer(function(input, output) {
         g.chart <- gvisGeoChart(data = DT(), 
                                 locationvar = 'iso2c', 
                                 colorvar = colnames(DT())[3], 
-                                options = list(width = 700, 
-                                               height = 400, 
-                                               dataMode = 'regions'))
+                                options = list(dataMode = 'regions'))
         # вставляем результат в html-документ
         return(g.chart)
     })
@@ -73,3 +70,4 @@ shinyServer(function(input, output) {
         DT()[order(DT()[, 3]), 2:3][1:5, ]
     })
 })
+
